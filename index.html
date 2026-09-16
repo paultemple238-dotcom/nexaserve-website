@@ -10,7 +10,7 @@
 <body>
   <header class="navbar">
     <div class="brand"><span>NEXA</span>SERVE</div>
-    <a class="button outline" href="#contact">Contact Us</a>
+    <a class="button outline" href="#order">Order Service</a>
   </header>
 
   <main>
@@ -50,7 +50,7 @@
           <option>Other request</option>
         </select>
         <label for="details">Request details *</label>
-        <textarea id="details" rows="5" required placeholder="Describe what you need..."></textarea>
+        <textarea id="details" rows="5" required placeholder="Describe what you need. Do not enter OTPs, PINs, passwords or complete identity numbers."></textarea>
         <label for="contactMethod">Preferred contact method *</label>
         <select id="contactMethod" required>
           <option value="">Choose contact method</option>
@@ -75,7 +75,7 @@
       const service = document.getElementById('service').value;
       const details = document.getElementById('details').value.trim();
       const method = document.getElementById('contactMethod').value;
-      const plainMessage = `NEXASERVE SERVICE REQUEST\n\nName: ${name}\nPhone: ${phone}\nService: ${service}\nDetails: ${details}\nPreferred contact: ${method}`;
+      const plainMessage = `NEXASERVE SERVICE REQUEST\n\nName: ${name}\nPhone: ${phone}\nService: ${service}\nDetails: ${details}\nPreferred contact: ${method}\n\nPlease confirm price, availability and payment instructions.`;
       const whatsappUrl = `https://wa.me/2348140007941?text=${encodeURIComponent(plainMessage)}`;
       const emailUrl = `mailto:contact.nexaserve@gmail.com?subject=${encodeURIComponent('NEXASERVE Service Request - ' + service)}&body=${encodeURIComponent(plainMessage)}`;
       if (method === 'Email') window.location.href = emailUrl;
