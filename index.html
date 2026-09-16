@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="NEXASERVE digital services, business registration and website development." />
   <title>NEXASERVE | Digital Services</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
@@ -18,20 +19,69 @@
         <p class="eyebrow">DIGITAL SERVICES MADE SIMPLE</p>
         <h1>Your Digital Needs.<br><span>Our Solution.</span></h1>
         <p class="intro">Reliable support for identity services, business registration and digital solutions.</p>
-        <div class="actions"><a class="button" href="#services">Explore Services</a><a class="text-link" href="#contact">Talk to us →</a></div>
+        <div class="actions"><a class="button" href="#services">Explore Services</a><a class="text-link" href="#order">Request a service →</a></div>
       </div>
       <div class="hero-card"><div class="card-mark">N</div><h2>One platform.<br>Multiple solutions.</h2><p>Professional service assistance with a customer-first approach.</p></div>
     </section>
 
     <section id="services" class="section"><p class="eyebrow">WHAT WE OFFER</p><h2>Our Services</h2><div class="grid">
-      <article><div class="icon">01</div><h3>NIN & BVN Services</h3><p>Verification assistance through authorized service channels.</p></article>
+      <article><div class="icon">01</div><h3>NIN &amp; BVN Services</h3><p>Verification assistance through authorized service channels.</p></article>
       <article><div class="icon">02</div><h3>CAC Services</h3><p>Business registration support and related services.</p></article>
       <article><div class="icon">03</div><h3>Website Development</h3><p>Modern, responsive websites for individuals and businesses.</p></article>
       <article><div class="icon">04</div><h3>Digital Support</h3><p>Practical help for your everyday digital needs.</p></article>
     </div></section>
 
-    <section id="contact" class="contact"><p class="eyebrow">LET'S WORK TOGETHER</p><h2>Need a digital service?</h2><p>Contact NEXASERVE to discuss your request and receive guidance on the next step.</p><div class="actions" style="justify-content:center;flex-wrap:wrap"><a class="button" href="mailto:contact.nexaserve@gmail.com?subject=NEXASERVE%20Service%20Request">Email NEXASERVE</a><a class="button outline" href="https://wa.me/2348140007941?text=Hello%20NEXASERVE%2C%20I%20would%20like%20to%20ask%20about%20your%20services." target="_blank" rel="noopener">WhatsApp Us</a></div><p style="margin-top:22px;font-size:.95rem">Email: contact.nexaserve@gmail.com<br />WhatsApp: +234 814 000 7941</p></section>
+    <section id="order" class="order-section">
+      <p class="eyebrow">START YOUR REQUEST</p>
+      <h2>Request or Order a Service</h2>
+      <p class="section-intro">Complete this form. Your request will be prepared for WhatsApp or email so our team can review it and confirm the next steps and price.</p>
+      <form id="serviceForm" class="order-form">
+        <label for="customerName">Full name *</label>
+        <input id="customerName" type="text" required placeholder="Enter your full name" />
+        <label for="customerPhone">Phone number *</label>
+        <input id="customerPhone" type="tel" required placeholder="e.g. 08123456789" />
+        <label for="service">Select service *</label>
+        <select id="service" required>
+          <option value="">Choose a service</option>
+          <option>NIN &amp; BVN Services</option>
+          <option>CAC Services</option>
+          <option>Website Development</option>
+          <option>Digital Support</option>
+          <option>Other request</option>
+        </select>
+        <label for="details">Request details *</label>
+        <textarea id="details" rows="5" required placeholder="Describe what you need..."></textarea>
+        <label for="contactMethod">Preferred contact method *</label>
+        <select id="contactMethod" required>
+          <option value="">Choose contact method</option>
+          <option value="WhatsApp">WhatsApp</option>
+          <option value="Email">Email</option>
+          <option value="Both">WhatsApp and Email</option>
+        </select>
+        <button class="button submit-button" type="submit">Continue with Request</button>
+        <p class="form-note">No payment is taken on this form. NEXASERVE will confirm requirements and pricing before work begins.</p>
+      </form>
+    </section>
+
+    <section id="contact" class="contact"><p class="eyebrow">LET'S WORK TOGETHER</p><h2>Need a digital service?</h2><p>Contact NEXASERVE to discuss your request and receive guidance on the next step.</p><div class="actions contact-actions"><a class="button" href="mailto:contact.nexaserve@gmail.com?subject=NEXASERVE%20Service%20Request">Email NEXASERVE</a><a class="button outline" href="https://wa.me/2348140007941?text=Hello%20NEXASERVE%2C%20I%20would%20like%20to%20ask%20about%20your%20services." target="_blank" rel="noopener">WhatsApp Us</a></div><p class="contact-details">Email: contact.nexaserve@gmail.com<br />WhatsApp: +234 814 000 7941</p></section>
   </main>
   <footer>© 2026 NEXASERVE. All rights reserved.</footer>
+
+  <script>
+    document.getElementById('serviceForm').addEventListener('submit', function (event) {
+      event.preventDefault();
+      const name = document.getElementById('customerName').value.trim();
+      const phone = document.getElementById('customerPhone').value.trim();
+      const service = document.getElementById('service').value;
+      const details = document.getElementById('details').value.trim();
+      const method = document.getElementById('contactMethod').value;
+      const plainMessage = `NEXASERVE SERVICE REQUEST\n\nName: ${name}\nPhone: ${phone}\nService: ${service}\nDetails: ${details}\nPreferred contact: ${method}`;
+      const whatsappUrl = `https://wa.me/2348140007941?text=${encodeURIComponent(plainMessage)}`;
+      const emailUrl = `mailto:contact.nexaserve@gmail.com?subject=${encodeURIComponent('NEXASERVE Service Request - ' + service)}&body=${encodeURIComponent(plainMessage)}`;
+      if (method === 'Email') window.location.href = emailUrl;
+      else if (method === 'WhatsApp') window.open(whatsappUrl, '_blank');
+      else { window.open(whatsappUrl, '_blank'); setTimeout(() => { window.location.href = emailUrl; }, 700); }
+    });
+  </script>
 </body>
 </html>
