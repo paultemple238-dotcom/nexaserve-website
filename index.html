@@ -34,7 +34,7 @@
     <section id="order" class="order-section">
       <p class="eyebrow">START YOUR REQUEST</p>
       <h2>Request or Order a Service</h2>
-      <p class="section-intro">Complete this form. Your request will be prepared for WhatsApp or email so our team can review it and confirm the next steps and price.</p>
+      <p class="section-intro">Submit your request securely. We will save it, generate an order reference, and help you continue through WhatsApp or email.</p>
       <form id="serviceForm" class="order-form">
         <label for="customerName">Full name *</label>
         <input id="customerName" type="text" required placeholder="Enter your full name" />
@@ -58,7 +58,8 @@
           <option value="Email">Email</option>
           <option value="Both">WhatsApp and Email</option>
         </select>
-        <button class="button submit-button" type="submit">Continue with Request</button>
+        <button class="button submit-button" type="submit">Submit Order</button>
+        <p id="formMessage" class="form-note" role="status"></p>
         <p class="form-note">No payment is taken on this form. NEXASERVE will confirm requirements and pricing before work begins.</p>
       </form>
     </section>
@@ -67,20 +68,64 @@
   </main>
   <footer>© 2026 NEXASERVE. All rights reserved.</footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    document.getElementById('serviceForm').addEventListener('submit', function (event) {
+    const SUPABASE_URL = 'https://lnqzsfhtrirrotbhdrmb.supabase.co';
+    const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_a-btb7LTOkTtV5kwYh0kNQ_XfssRMRm';
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+    document.getElementById('serviceForm').addEventListener('submit', async function (event) {
       event.preventDefault();
+
+      const button = this.querySelector('button[type="submit"]');
+      const message = document.getElementById('formMessage');
       const name = document.getElementById('customerName').value.trim();
       const phone = document.getElementById('customerPhone').value.trim();
       const service = document.getElementById('service').value;
       const details = document.getElementById('details').value.trim();
       const method = document.getElementById('contactMethod').value;
-      const plainMessage = `NEXASERVE SERVICE REQUEST\n\nName: ${name}\nPhone: ${phone}\nService: ${service}\nDetails: ${details}\nPreferred contact: ${method}\n\nPlease confirm price, availability and payment instructions.`;
+
+      button.disabled = true;
+      button.textContent = 'Submitting...';
+      message.textContent = '';
+
+      const { data, error } = await supabaseClient
+        .from('orders')
+        .insert({
+          customer_name: name,
+          customer_phone: phone,
+          service: service,
+          details: details,
+          contact_method: method
+        })
+        .select('order_code, status')
+        .single();
+
+      if (error) {
+        console.error('Order submission error:', error);
+        message.textContent = 'We could not save your order. Please try again or contact us on WhatsApp.';
+        button.disabled = false;
+        button.textContent = 'Submit Order';
+        return;
+      }
+
+      const orderCode = data.order_code;
+      const plainMessage = `NEXASERVE SERVICE ORDER\n\nOrder reference: ${orderCode}\nName: ${name}\nPhone: ${phone}\nService: ${service}\nDetails: ${details}\nPreferred contact: ${method}\n\nPlease confirm price, availability and payment instructions.`;
       const whatsappUrl = `https://wa.me/2348140007941?text=${encodeURIComponent(plainMessage)}`;
-      const emailUrl = `mailto:contact.nexaserve@gmail.com?subject=${encodeURIComponent('NEXASERVE Service Request - ' + service)}&body=${encodeURIComponent(plainMessage)}`;
+      const emailUrl = `mailto:contact.nexaserve@gmail.com?subject=${encodeURIComponent('NEXASERVE Order ' + orderCode + ' - ' + service)}&body=${encodeURIComponent(plainMessage)}`;
+
+      message.textContent = `Order saved successfully. Your reference is ${orderCode}.`;
+      this.reset();
+
       if (method === 'Email') window.location.href = emailUrl;
-      else if (method === 'WhatsApp') window.open(whatsappUrl, '_blank');
-      else { window.open(whatsappUrl, '_blank'); setTimeout(() => { window.location.href = emailUrl; }, 700); }
+      else if (method === 'WhatsApp') window.open(whatsappUrl, '_blank', 'noopener');
+      else {
+        window.open(whatsappUrl, '_blank', 'noopener');
+        setTimeout(() => { window.location.href = emailUrl; }, 700);
+      }
+
+      button.disabled = false;
+      button.textContent = 'Submit Order';
     });
   </script>
 </body>
